@@ -2,10 +2,10 @@
 
 每个文件夹是一个Cube工程：
 
-LCDDisplay------>SPI驱动LCD，将PC通过串口发送内容显示到LCD上
+LCDDisplay------>SPI驱动LCD显示字符串
 
-LEDBlinkAndPWM------>按键控制LED闪烁与呼吸效果
+LEDBlinkAndPWM------>按键控制切换LED闪烁与呼吸效果
 
 LEDControlByKEY------>按键控制LED开关
 
-PC2UART------>PC通过UART与STM32L4通信试验
+PC2UART------>通过UART返回PC发送的数据
