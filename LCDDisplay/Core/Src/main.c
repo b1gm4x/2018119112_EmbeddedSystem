@@ -19,9 +19,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "dma.h"
 #include "spi.h"
-#include "usart.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
@@ -46,9 +44,8 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-uint8_t v_ReceiveDate;  
-uint8_t v_ReceiveStr[1024] = {1}; 
-uint16_t v_strCount = 0; 
+uint8_t receivedate;  
+uint16_t count = 0; 
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -90,34 +87,11 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_DMA_Init();
-  MX_USART1_UART_Init();
   MX_SPI2_Init();
   /* USER CODE BEGIN 2 */
 	LCD_Init();	
 	LCD_Clear(BLACK); 
-	HAL_UART_Receive_DMA(&huart1, &v_ReceiveDate, 1);
-	LCD_Draw_Circle(120, 120, 100); 
-	LCD_Draw_Circle(120, 120, 80);
-	PutChinese_strings(50, 90, " ‰»Î”¢Œƒ",0); 
-  /* USER CODE END 2 */
-
-  /* Infinite loop */
-  /* USER CODE BEGIN WHILE */
-  while (1)
-  {
-		if(v_ReceiveStr[v_strCount] == 0){
-			LCD_Clear(BLACK); 
-			LCD_ShowString( 10, 100, 240, 32, 32, (char *)v_ReceiveStr);  
-			memset(v_ReceiveStr, 0, 1024);
-			v_ReceiveStr[0] = 1; 
-			v_strCount=0;  
-		}
-    /* USER CODE END WHILE */
-
-    /* USER CODE BEGIN 3 */
-  }
-  /* USER CODE END 3 */
+	LCD_ShowString( 10, 100, 200, 32, 32, "LCD TEST");   
 }
 
 /**
@@ -175,13 +149,6 @@ void SystemClock_Config(void)
   }
 }
 
-/* USER CODE BEGIN 4 */
-void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){  
-	v_ReceiveStr[v_strCount++] = v_ReceiveDate; 
-	
-	HAL_UART_Receive_DMA(&huart1, &v_ReceiveDate, 1);  
-}
-/* USER CODE END 4 */
 
 /**
   * @brief  This function is executed in case of error occurrence.
