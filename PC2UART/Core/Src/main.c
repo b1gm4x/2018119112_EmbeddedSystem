@@ -19,7 +19,6 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "dma.h"
 #include "usart.h"
 #include "gpio.h"
 
@@ -45,7 +44,7 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-uint8_t v_reciveData;
+uint8_t recivedata;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -87,18 +86,15 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_DMA_Init();
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
-	printf("向串口发送信息会被回显。\n");
-	HAL_UART_Receive_DMA(&huart1, &v_reciveData, 1);
+	HAL_UART_Receive_IT(&huart1, &recivedata, 1);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-		HAL_Delay(2000);
     /* USER CODE END WHILE */
 		
     /* USER CODE BEGIN 3 */
@@ -160,13 +156,6 @@ void SystemClock_Config(void)
     Error_Handler();
   }
 }
-
-/* USER CODE BEGIN 4 */
-void HAL_UART_RxHalfCpltCallback(UART_HandleTypeDef *huart){
-		HAL_UART_Transmit(&huart1,&v_reciveData, 1, 0xff);
-		HAL_UART_Receive_DMA(&huart1, &v_reciveData, 1);
-}
-/* USER CODE END 4 */
 
 /**
   * @brief  This function is executed in case of error occurrence.
