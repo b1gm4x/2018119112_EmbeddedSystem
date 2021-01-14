@@ -42,9 +42,9 @@
 
 /* Private variables ---------------------------------------------------------*/
 enum s_Led_Mode_Value{
-	twinkleMode = 0, 
-	breathMode = 1 
-} v_Led_Mode = twinkleMode;
+	blink = 0, 
+	pwm = 1 
+} v_Led_Mode = blink;
 /* USER CODE BEGIN PV */
 
 /* USER CODE END PV */
@@ -52,7 +52,7 @@ enum s_Led_Mode_Value{
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
-void delay_us(uint32_t us);
+void delayus(uint32_t us);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -97,21 +97,21 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-		if(v_Led_Mode == twinkleMode){
+		if(v_Led_Mode == blink){
 			HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin); 
-			HAL_Delay(500);
+			HAL_Delay(400);
 		}
-		for(int timeCount = 0, changetime = -200; v_Led_Mode == breathMode;){
-				for(int timeCount2 = 0; timeCount2 < 10; timeCount2++){ 
+		for(int times = 0, ctime = -200; v_Led_Mode == pwm;){
+				for(int times2 = 0; times2 < 10; times2++){ 
 					HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, GPIO_PIN_SET);
-					delay_us(timeCount/10);
+					delayus(times/10);
 					HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, GPIO_PIN_RESET);
-					delay_us(2000-timeCount/10);
+					delayus(2000-times/10);
 				}
-				if(timeCount>=20000||timeCount<=0){
-						changetime = -changetime;
+				if(times>=20000||times<=0){
+						ctime = -ctime;
 				}
-				timeCount+=changetime;
+				times+=ctime;
 		}
     /* USER CODE BEGIN 3 */
   }
@@ -170,14 +170,14 @@ void SystemClock_Config(void)
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
  {
 	 
-		if(v_Led_Mode == twinkleMode){
-			v_Led_Mode = breathMode;
-		}else if(v_Led_Mode == breathMode){
-			v_Led_Mode = twinkleMode;
+		if(v_Led_Mode == blink){
+			v_Led_Mode = pwm;
+		}else if(v_Led_Mode == pwm){
+			v_Led_Mode = blink;
 		}
  }
  
-void delay_us(uint32_t us)
+void delayus(uint32_t us)
 {
     uint32_t delay = (HAL_RCC_GetHCLKFreq() / 4000000 * us);
     while (delay--)
