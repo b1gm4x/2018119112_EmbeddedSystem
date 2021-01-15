@@ -88,20 +88,15 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  /* USER CODE BEGIN 2 */
-
-  /* USER CODE END 2 */
-
-  /* Infinite loop */
-  /* USER CODE BEGIN WHILE */
   while (1)
   {
-    /* USER CODE END WHILE */
 		if(LedMode == blink){
 			HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin); 
 			HAL_Delay(400);
 		}
-		for(int times = 0, changetime = -200; LedMode == pwm;){
+    if(LedMode == pwm){
+    int times = 0,
+		while(changetime = -200){
 				for(int times2 = 0; times2 < 10; times2++){ 
 					HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, GPIO_PIN_SET);
 					delayus(times/10);
@@ -113,9 +108,8 @@ int main(void)
 				}
 				times+=changetime;
 		}
-    /* USER CODE BEGIN 3 */
+    }
   }
-  /* USER CODE END 3 */
 }
 
 /**
@@ -179,7 +173,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
  
 void delayus(uint32_t us)
 {
-    uint32_t delay = (HAL_RCC_GetHCLKFreq() / 4000000 * us);
+    uint32_t delay = (HAL_RCC_GetHCLKFreq() / 3000000 * us);
     while (delay--)
 	{
 		;
