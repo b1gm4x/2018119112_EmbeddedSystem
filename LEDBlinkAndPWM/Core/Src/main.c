@@ -41,10 +41,10 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
-enum s_Led_Mode_Value{
+enum s_LedMode{
 	blink = 0, 
 	pwm = 1 
-} v_Led_Mode = blink;
+} LedMode = blink;
 /* USER CODE BEGIN PV */
 
 /* USER CODE END PV */
@@ -97,11 +97,11 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-		if(v_Led_Mode == blink){
+		if(LedMode == blink){
 			HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin); 
 			HAL_Delay(400);
 		}
-		for(int times = 0, ctime = -200; v_Led_Mode == pwm;){
+		for(int times = 0, changetime = -200; LedMode == pwm;){
 				for(int times2 = 0; times2 < 10; times2++){ 
 					HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, GPIO_PIN_SET);
 					delayus(times/10);
@@ -109,9 +109,9 @@ int main(void)
 					delayus(2000-times/10);
 				}
 				if(times>=20000||times<=0){
-						ctime = -ctime;
+						changetime = -changetime;
 				}
-				times+=ctime;
+				times+=changetime;
 		}
     /* USER CODE BEGIN 3 */
   }
@@ -170,10 +170,10 @@ void SystemClock_Config(void)
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
  {
 	 
-		if(v_Led_Mode == blink){
-			v_Led_Mode = pwm;
-		}else if(v_Led_Mode == pwm){
-			v_Led_Mode = blink;
+		if(LedMode == blink){
+			LedMode = pwm;
+		}else if(LedMode == pwm){
+			LedMode = blink;
 		}
  }
  
